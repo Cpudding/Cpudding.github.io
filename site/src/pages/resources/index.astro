@@ -1,0 +1,33 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getPosts, postHref } from '../../lib/posts';
+
+const posts = (await getPosts()).filter((post) =>
+	post.data.tags.some((tag) => tag === '数学' || tag === '数据结构'),
+);
+---
+
+<PageLayout title="学习资源" description="布丁小窝的算法笔记与平衡树、线段树配套练习入口。">
+	<header class="page-header">
+		<p class="eyebrow">RESOURCES</p>
+		<h1>学习资源</h1>
+		<p>把原理、实现与练习放在一起，方便回顾和动手验证。</p>
+	</header>
+	<section aria-labelledby="algorithm-notes">
+		<h2 id="algorithm-notes">站内算法笔记</h2>
+		<ul class="resource-list">
+			{posts.map((post) => (
+				<li><h3><a href={postHref(post)}>{post.data.title}</a></h3><p>{post.data.description}</p></li>
+			))}
+		</ul>
+	</section>
+	<section aria-labelledby="algorithm-practice">
+		<h2 id="algorithm-practice">配套练习</h2>
+		<p>下面两道题也是原文中的练习入口。</p>
+		<ul class="resource-list">
+			<li><h3><a href="https://www.luogu.com.cn/problem/P3369">洛谷 P3369 · 普通平衡树</a></h3><p>练习插入、删除、排名、前驱和后继等操作。</p></li>
+			<li><h3><a href="https://www.luogu.com.cn/problem/P3372">洛谷 P3372 · 线段树 1</a></h3><p>练习区间加法与区间求和。</p></li>
+		</ul>
+	</section>
+	<p>还可以按<a href="/tags/">标签</a>浏览，或在<a href="/search/">全文搜索</a>中查找代码和术语。</p>
+</PageLayout>

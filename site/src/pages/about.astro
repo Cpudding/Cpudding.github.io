@@ -1,0 +1,31 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<PageLayout title="关于" description="焦糖布丁的个人博客，记录算法学习、代码和开发心得。">
+	<header class="page-header">
+		<p class="eyebrow">ABOUT</p>
+		<h1>你好，我是焦糖布丁。</h1>
+		<p>欢迎来到{SITE_TITLE}。这里用来保存代码，整理学习笔记，也记录一些心得体会。</p>
+	</header>
+	<div class="prose">
+		<h2>为什么写博客</h2>
+		<p>
+			大一时购买的学生云服务器到期后，大学期间不少课设代码没能及时转移。
+			这件事让我开始用 GitHub 管理自己的产出，也有了这个博客。
+		</p>
+		<p>
+			目前的文章主要是算法竞赛笔记，包含数据结构的原理、数学方法和 C++ 实现。
+			希望整理下来的内容，既方便自己回顾，也能帮助遇到相同问题的人。
+		</p>
+		<p><a href="/2021/11/01/%E7%84%A6%E7%B3%96%E5%B8%83%E4%B8%81/">阅读最初的建站记录 →</a></p>
+		<blockquote><p>{SITE_DESCRIPTION}</p></blockquote>
+		<h2>找到我</h2>
+		<ul>
+			<li>GitHub：<a href="https://github.com/Cpudding">Cpudding</a></li>
+			<li>邮箱：<a href="mailto:chino.pudding@gmail.com">chino.pudding@gmail.com</a></li>
+		</ul>
+		<p>从<a href="/archives/">文章归档</a>开始阅读，也可以通过<a href="/tags/">标签</a>寻找感兴趣的主题。</p>
+	</div>
+</PageLayout>

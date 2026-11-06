@@ -1,0 +1,28 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const permalinks = new Set(posts.map((post) => post.data.permalink));
+	if (permalinks.size !== posts.length) {
+		throw new Error('文章 permalink 不可重复。');
+	}
+	return posts.map((post) => ({
+		params: { slug: post.data.permalink.slice(1, -1) },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+const posts = (await getCollection('blog')).sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+const index = posts.findIndex((entry) => entry.id === post.id);
+const previousPost = posts[index - 1]?.data;
+const nextPost = posts[index + 1]?.data;
+---
+
+<BlogPost {...post.data} headings={headings} previousPost={previousPost} nextPost={nextPost}>
+	<Content />
+</BlogPost>

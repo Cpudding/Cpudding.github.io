@@ -1,0 +1,42 @@
+---
+import { SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+	<div class="header-inner">
+		<a class="site-brand" href="/" aria-label={`${SITE_TITLE}首页`}>
+			<span class="brand-mark" aria-hidden="true">布</span>
+			<span>{SITE_TITLE}</span>
+		</a>
+		<nav aria-label="主导航">
+			<HeaderLink href="/">首页</HeaderLink>
+			<HeaderLink href="/archives/">归档</HeaderLink>
+			<HeaderLink href="/tags/">标签</HeaderLink>
+			<HeaderLink href="/about/">关于</HeaderLink>
+			<HeaderLink href="/search/" class="search-link">
+				<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="16" height="16">
+					<circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5" />
+					<path d="m13 13 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+				</svg>
+				搜索
+			</HeaderLink>
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header { border-bottom: 1px solid var(--line); }
+	.header-inner { width: min(1000px, calc(100% - 48px)); min-height: 88px; margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+	.site-brand { display: inline-flex; gap: 12px; align-items: center; color: var(--ink); text-decoration: none; font-size: 19px; font-weight: 700; white-space: nowrap; }
+	.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; background: var(--ink); color: var(--paper); font-size: 18px; font-weight: 400; border-radius: 4px; }
+	nav { display: flex; align-items: center; gap: 26px; }
+	nav :global(a) { display: inline-flex; align-items: center; gap: 6px; padding-block: 8px; color: var(--muted); font-size: 14px; line-height: 1.5; text-decoration: none; border-bottom: 1px solid transparent; }
+	nav :global(a:hover), nav :global(a.active) { color: var(--ink); border-bottom-color: var(--accent); }
+	@media (max-width: 620px) {
+		.header-inner { width: calc(100% - 36px); padding-block: 20px 12px; min-height: auto; flex-direction: column; align-items: flex-start; gap: 12px; }
+		nav { width: 100%; justify-content: space-between; gap: 12px; }
+		nav :global(a) { font-size: 14px; }
+	}
+</style>

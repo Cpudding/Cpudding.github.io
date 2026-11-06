@@ -1,0 +1,101 @@
+:root {
+	color-scheme: light;
+	--paper: #f8f6f1;
+	--surface: #fffdf9;
+	--ink: #292722;
+	--muted: #756f65;
+	--accent: #945c36;
+	--line: #e2dcd1;
+	--soft: #eee8de;
+	--font-body: var(--font-atkinson), -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; color: var(--ink); background: var(--paper); font-family: var(--font-body); font-size: 16px; line-height: 1.85; overflow-wrap: break-word; -webkit-font-smoothing: antialiased; }
+::selection { background: #e8d7bd; color: var(--ink); }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 2px; }
+main:focus { outline: none; }
+h1, h2, h3, h4, h5, h6 { margin: 0 0 16px; color: var(--ink); line-height: 1.5; font-weight: 700; }
+h1 { font-size: clamp(26px, 3vw, 34px); letter-spacing: -.025em; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
+h4, h5, h6 { font-size: 17px; }
+p { margin: 0 0 20px; }
+ul, ol { padding-left: 1.5em; }
+img { max-width: 100%; height: auto; }
+svg { flex-shrink: 0; }
+button, input, textarea, select { font: inherit; }
+button, [type="submit"] { cursor: pointer; }
+input, textarea, select { max-width: 100%; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 10px 14px; }
+input[type="search"] { width: 100%; }
+button { color: var(--ink); background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 8px 16px; }
+hr { margin-block: 32px; border: 0; border-top: 1px solid var(--line); }
+
+.page-main { width: min(1000px, calc(100% - 48px)); min-width: 0; margin-inline: auto; padding-block: 56px 80px; }
+.page-header, .page-heading { max-width: 760px; margin-bottom: 38px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.page-header h1, .page-heading h1 { margin-bottom: 12px; }
+.page-header p, .page-heading p { color: var(--muted); margin: 0; }
+.eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+.muted { color: var(--muted); }
+.post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; color: var(--muted); font-size: 13px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 0; margin: 0; list-style: none; }
+.tag-link { color: var(--accent); font-size: 13px; text-decoration: none; }
+.tag-link::before { content: "#"; margin-right: 3px; opacity: .6; }
+.tag-link:hover { text-decoration: underline; }
+.post-list { max-width: 760px; list-style: none; padding: 0; margin: 0; }
+.post-list > li { padding-block: 24px; border-bottom: 1px solid var(--line); }
+.post-list > li:first-child { padding-top: 0; }
+.post-list h2, .post-list h3 { margin: 8px 0; font-size: 21px; }
+.post-list h2 a, .post-list h3 a { color: var(--ink); text-decoration: none; }
+.post-list h2 a:hover, .post-list h3 a:hover { color: var(--accent); }
+.post-list p { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+.resource-list { max-width: 760px; list-style: none; padding: 0; }
+.resource-list > li { padding-block: 18px; border-bottom: 1px solid var(--line); }
+.resource-list p { margin: 6px 0 0; color: var(--muted); }
+.empty-state { max-width: 760px; padding: 28px 0; color: var(--muted); }
+
+.prose { max-width: 760px; min-width: 0; font-size: 16px; line-height: 1.95; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h1 { margin-top: 44px; font-size: 28px; }
+.prose h2 { margin-top: 42px; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 23px; }
+.prose h3 { margin-top: 32px; font-size: 20px; }
+.prose h4, .prose h5, .prose h6 { margin-top: 26px; }
+.prose h1, .prose h2, .prose h3, .prose h4 { scroll-margin-top: 24px; }
+.prose p, .prose ul, .prose ol { margin-block: 0 22px; }
+.prose li { margin-block: 6px; }
+.prose li > ul, .prose li > ol { margin-bottom: 0; }
+.prose img { display: block; margin: 26px auto; border-radius: 4px; }
+code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+code { padding: .12em .35em; border-radius: 3px; background: var(--soft); color: #714c31; font-size: .85em; }
+pre { max-width: 100%; margin-block: 26px; padding: 22px 24px; overflow-x: auto; overscroll-behavior-x: contain; border-radius: 5px; background: #272822; color: #f8f8f2; font-size: 13px; line-height: 1.75; tab-size: 4; }
+pre code { padding: 0; border-radius: 0; background: none; color: inherit; font-size: inherit; white-space: pre; overflow-wrap: normal; word-break: normal; }
+.prose blockquote { margin: 26px 0; padding: 3px 0 3px 20px; border-left: 3px solid #c5a17b; color: var(--muted); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose table { display: block; width: max-content; max-width: 100%; margin-block: 26px; border-collapse: collapse; overflow-x: auto; font-size: 14px; }
+.prose th, .prose td { padding: 10px 16px; border: 1px solid var(--line); text-align: left; }
+.prose th { background: var(--soft); }
+.prose mjx-container { max-width: 100%; }
+.prose mjx-container[display="true"] { display: block; padding-block: 8px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; }
+.prose mjx-container[display="true"] > svg { max-width: none; }
+
+.skip-link { position: absolute; z-index: 10; top: 12px; left: 18px; padding: 8px 16px; background: var(--ink); color: var(--paper); transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); color: var(--paper); }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (max-width: 620px) {
+	.page-main { width: calc(100% - 36px); padding-block: 36px 52px; }
+	.page-header, .page-heading { margin-bottom: 28px; padding-bottom: 22px; }
+	h1 { font-size: 27px; }
+	.post-list h2, .post-list h3 { font-size: 19px; }
+	.prose { font-size: 15px; }
+	.prose h2 { font-size: 21px; }
+	.prose h3 { font-size: 18px; }
+	pre { padding: 18px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+}

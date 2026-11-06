@@ -1,0 +1,23 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getPosts, getTagEntries } from '../../lib/posts';
+
+const posts = await getPosts();
+const tags = getTagEntries(posts);
+---
+
+<PageLayout title="文章分类" description="文章目前按标签整理，可以从数学、数据结构或完整归档开始阅读。">
+	<header class="page-header">
+		<p class="eyebrow">EXPLORE</p>
+		<h1>文章分类</h1>
+		<p>目前还没有单独设置分类，文章按标签整理。</p>
+	</header>
+	<section class="empty-state" aria-labelledby="browse-topics">
+		<h2 id="browse-topics">按主题开始阅读</h2>
+		<p>选择一个标签，找到对应的学习笔记。</p>
+		<div class="tags">
+			{tags.map((tag) => <a class="tag-link" href={tag.href}>{tag.name} · {tag.posts.length} 篇</a>)}
+		</div>
+	</section>
+	<p>想按时间浏览？<a href="/archives/">查看全部 {posts.length} 篇文章 →</a></p>
+</PageLayout>

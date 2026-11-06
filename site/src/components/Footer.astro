@@ -1,0 +1,31 @@
+---
+import { AUTHOR_NAME, GITHUB_URL, SITE_DESCRIPTION } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+	<div class="footer-inner">
+		<div>
+			<p class="footer-motto">{SITE_DESCRIPTION}</p>
+			<p class="copyright">© 2021–{year} {AUTHOR_NAME}</p>
+		</div>
+		<nav aria-label="页脚导航">
+			<a href="/rss.xml">RSS 订阅</a>
+			<a href={GITHUB_URL} rel="me">GitHub <span aria-hidden="true">↗</span></a>
+		</nav>
+	</div>
+</footer>
+
+<style>
+	.site-footer { margin-top: auto; border-top: 1px solid var(--line); }
+	.footer-inner { width: min(1000px, calc(100% - 48px)); margin-inline: auto; padding-block: 30px 38px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+	p { margin: 0; }
+	.footer-motto { color: var(--muted); font-size: 13px; }
+	.copyright { margin-top: 5px; color: var(--muted); font-size: 12px; }
+	nav { display: flex; gap: 22px; }
+	a { color: var(--muted); font-size: 13px; text-decoration: none; }
+	a:hover { color: var(--accent); }
+	@media (max-width: 620px) {
+		.footer-inner { width: calc(100% - 36px); align-items: flex-start; flex-direction: column; gap: 18px; padding-block: 24px 30px; }
+	}
+</style>

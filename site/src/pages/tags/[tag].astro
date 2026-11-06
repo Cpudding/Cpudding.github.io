@@ -1,0 +1,31 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getPosts, getTagEntries, postHref, type TagEntry } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	return getTagEntries(await getPosts()).map((tag) => ({
+		params: { tag: tag.name }, props: { tag },
+	}));
+}
+
+interface Props { tag: TagEntry }
+const { tag } = Astro.props;
+---
+
+<PageLayout title={`标签：${tag.name}`} description={`${tag.name}相关的 ${tag.posts.length} 篇文章。`}>
+	<header class="page-header">
+		<p class="eyebrow"><a href="/tags/">全部标签</a></p>
+		<h1>{tag.name}</h1>
+		<p>这个标签下有 {tag.posts.length} 篇文章，按发布时间排列。</p>
+	</header>
+	<ul class="post-list">
+		{tag.posts.map((post) => (
+			<li>
+				<div class="post-meta"><FormattedDate date={post.data.pubDate} /></div>
+				<h2><a href={postHref(post)}>{post.data.title}</a></h2>
+				<p>{post.data.description}</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

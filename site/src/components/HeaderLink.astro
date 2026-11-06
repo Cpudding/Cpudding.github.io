@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+const { href, class: className, ...props } = Astro.props;
+const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+const pathname = normalize(Astro.url.pathname);
+const target = normalize(typeof href === 'string' ? href : '/');
+const isActive = target === '/'
+	? pathname === '/' || pathname === '/blog'
+	: pathname === target || pathname.startsWith(`${target}/`);
+---
+
+<a href={href} class:list={[className, { active: isActive }]} aria-current={isActive ? 'page' : undefined} {...props}>
+	<slot />
+</a>

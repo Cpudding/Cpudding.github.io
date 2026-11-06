@@ -1,0 +1,30 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getPosts, postHref } from '../../lib/posts';
+
+const posts = (await getPosts()).sort((a, b) =>
+	(b.data.updatedDate ?? b.data.pubDate).valueOf() - (a.data.updatedDate ?? a.data.pubDate).valueOf(),
+);
+---
+
+<PageLayout title="更新记录" description="按文章记录的更新时间，浏览布丁小窝的内容。">
+	<header class="page-header">
+		<p class="eyebrow">UPDATES</p>
+		<h1>更新记录</h1>
+		<p>按文章记录的更新时间排列，方便找到最近维护的内容。</p>
+	</header>
+	<ul class="post-list">
+		{posts.map((post) => (
+			<li>
+				<div class="post-meta">
+					{post.data.updatedDate ? '更新于 ' : '发布于 '}
+					<FormattedDate date={post.data.updatedDate ?? post.data.pubDate} />
+				</div>
+				<h2><a href={postHref(post)}>{post.data.title}</a></h2>
+				<p>{post.data.description}</p>
+			</li>
+		))}
+	</ul>
+	<p>如需按发布时间浏览，请前往<a href="/archives/">文章归档</a>。</p>
+</PageLayout>

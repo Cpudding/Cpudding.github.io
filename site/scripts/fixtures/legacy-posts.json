@@ -1,0 +1,253 @@
+{
+  "version": 1,
+  "origin": "https://cpudding.github.io",
+  "source_commit": "ac107c3cda3519b3dd7f2b3cde64f148f9cfdca9",
+  "code_normalization": "HTML text content, excluding Hexo line-number gutters; CRLF/CR becomes LF; trailing newlines removed; UTF-8 SHA256.",
+  "code_block_count": 27,
+  "posts": [
+    {
+      "path": "/2021/11/01/焦糖布丁/",
+      "title": "焦糖布丁",
+      "published": "2021-11-01T14:49:51.637Z",
+      "updated": "2021-11-10T13:08:43.080Z",
+      "math": false,
+      "code_sha256": [],
+      "headings": []
+    },
+    {
+      "path": "/2021/11/02/【算法竞赛 - 数学】拉格朗日插值法/",
+      "title": "拉格朗日插值法",
+      "published": "2021-11-02T05:49:46.686Z",
+      "updated": "2021-11-23T08:26:50.934Z",
+      "math": true,
+      "code_sha256": [
+        "073afa36aecd7785abbe29ca559e0a057f141a6b78bb50ad43b0601fcef9e4b2"
+      ],
+      "headings": [
+        {
+          "id": "模板",
+          "text": "模板",
+          "depth": 2
+        },
+        {
+          "id": "版本1：-x-取从-1-开始的连续正整数，并对需要的数字进行预处理缓存。",
+          "text": "版本1： x 取从 1 开始的连续正整数，并对需要的数字进行预处理缓存。",
+          "depth": 3
+        }
+      ]
+    },
+    {
+      "path": "/2021/11/10/【算法竞赛-数据结构】平衡树/",
+      "title": "【算法竞赛-数据结构】平衡树",
+      "published": "2021-11-10T12:49:49.000Z",
+      "updated": "2022-04-09T14:09:28.873Z",
+      "math": true,
+      "code_sha256": [
+        "0fec1bb6cca8cc5d02b723fe72b4fae25d8893e7a3228c23950463a01cfbece9",
+        "0a8018c8ea147f924302df1925740811870838ba064325cc5104047b217cce32",
+        "8dc8930b7c446ac2f93bd2d401ef3eae06107c7d7009ce3074bd09507c2f227c",
+        "6ee172c8a987ea363c3d830aec1d329c7006298ed8b2f171e0f6a61d344ffc21",
+        "7939ffe263c71993d9375c8f3f287521423e997be8105a1221efb04e0ae0fcf4",
+        "1cd913aac3181eab4f31cec2fde49245f94423c0ab644a8abedb1e82a2a12a6a",
+        "66e84cbace18eed41aa4d6ff1b63ace66b2606e0af3bf42c1adc6ba6cb95621d",
+        "b8840c951bbfe599e821de6fe7f8241bebd4c53cc36a6131447a04320f34e6b9",
+        "2f60738257a86edcbf572f8505f50a46bb288fe8f0d05ad83b8ccfb24899fae8",
+        "4eb4a1dc1a1a6cf9a0b2a656f2ba241b11f26d50d4ef2d8ff4823442d6c53009",
+        "3f98cb824a4abde114f8b9859577e98516b7f3dca290daf9932e0eab62d9c787",
+        "d1ebd648b23224fe2c739c5c48c82b50ebb188188f83cd22caf954541f26636f",
+        "44ddb7bd9f73217639b6dedfcd9a4f8b9a68fc9f96da62d962e6ac9b51701090",
+        "8b24351546f5dd84e014252053dbc74eac53af0abcd41691fcff9917867694fb",
+        "e7dfa724f944a5f204d70b0ef6355949c3516a600c89ae100dd8084702b53b94",
+        "a34be230bed420dd83b2e0f6e44ea0fc8dd2e317f5c27da90b1ba97505a38da5",
+        "be3f310c0e528c7d917ff5e61ed510e8d95a96d50c24e53e1ae627916e4d1952",
+        "406e487d89263db2621356e101ae22d413f0548d99361ae97e9342801e2cf6bc",
+        "90362075d06352fafa539bab2f01146c7397e1173ce4c6d014a950f02cbe1fb9",
+        "c0bdca800e0c2637e42b20d8584654bee7e4ea344003722ab1c8931ca73b8a26",
+        "13c52fcac8bdd5252c990d87135f609a4dc66d1f466d7bda4542e279e798f7f7",
+        "56465fa6b92c27b523277261e1d483e229605eb0483c38a3f9e0bc8ee8f4e810"
+      ],
+      "headings": [
+        {
+          "id": "二叉搜索树-BST",
+          "text": "二叉搜索树(BST)",
+          "depth": 2
+        },
+        {
+          "id": "定义",
+          "text": "定义",
+          "depth": 3
+        },
+        {
+          "id": "BST两种极端情况",
+          "text": "BST两种极端情况",
+          "depth": 3
+        },
+        {
+          "id": "插入",
+          "text": "插入",
+          "depth": 3
+        },
+        {
+          "id": "查找",
+          "text": "查找",
+          "depth": 3
+        },
+        {
+          "id": "遍历",
+          "text": "遍历",
+          "depth": 3
+        },
+        {
+          "id": "删除",
+          "text": "删除",
+          "depth": 3
+        },
+        {
+          "id": "总结",
+          "text": "总结",
+          "depth": 3
+        },
+        {
+          "id": "替罪羊树-SGT",
+          "text": "替罪羊树(SGT)",
+          "depth": 2
+        },
+        {
+          "id": "简介",
+          "text": "简介",
+          "depth": 3
+        },
+        {
+          "id": "定义-2",
+          "text": "定义",
+          "depth": 3
+        },
+        {
+          "id": "重构子树",
+          "text": "重构子树",
+          "depth": 3
+        },
+        {
+          "id": "插入-2",
+          "text": "插入",
+          "depth": 3
+        },
+        {
+          "id": "删除-2",
+          "text": "删除",
+          "depth": 3
+        },
+        {
+          "id": "查找-2",
+          "text": "查找",
+          "depth": 3
+        },
+        {
+          "id": "at",
+          "text": "at",
+          "depth": 4
+        },
+        {
+          "id": "lower-bound",
+          "text": "lower_bound",
+          "depth": 4
+        },
+        {
+          "id": "upper-bound",
+          "text": "upper_bound",
+          "depth": 4
+        },
+        {
+          "id": "总结-2",
+          "text": "总结",
+          "depth": 3
+        },
+        {
+          "id": "红黑树-RBT",
+          "text": "红黑树(RBT)",
+          "depth": 2
+        },
+        {
+          "id": "简介-2",
+          "text": "简介",
+          "depth": 3
+        },
+        {
+          "id": "定义-3",
+          "text": "定义",
+          "depth": 3
+        },
+        {
+          "id": "左旋与右旋",
+          "text": "左旋与右旋",
+          "depth": 3
+        },
+        {
+          "id": "插入-3",
+          "text": "插入",
+          "depth": 3
+        },
+        {
+          "id": "插入平衡",
+          "text": "插入平衡",
+          "depth": 3
+        },
+        {
+          "id": "删除-3",
+          "text": "删除",
+          "depth": 3
+        },
+        {
+          "id": "删除平衡",
+          "text": "删除平衡",
+          "depth": 3
+        },
+        {
+          "id": "总结-3",
+          "text": "总结",
+          "depth": 3
+        }
+      ]
+    },
+    {
+      "path": "/2021/11/11/【算法竞赛-数据结构】线段树/",
+      "title": "【算法竞赛-数据结构】线段树",
+      "published": "2021-11-11T12:41:26.000Z",
+      "updated": "2021-11-11T13:10:37.355Z",
+      "math": true,
+      "code_sha256": [
+        "c7661265d5dfa8718245bd1b2bdabdfb3f12402815cb9df3ccbd48940bfed63f",
+        "5e4291c1a7dfc1fc073729f990876105145a36de1ec2f19139e017b0a69302fd",
+        "55b9f5012b25074ec143107c4ccc6829cc1e9ac5ef98e72fa2121687e7ee9b05",
+        "124a32a6e72572eaf5fb298f2a66901b8adae7918db6ef8017ec66f833e20d6e"
+      ],
+      "headings": [
+        {
+          "id": "定义",
+          "text": "定义",
+          "depth": 2
+        },
+        {
+          "id": "建树",
+          "text": "建树",
+          "depth": 2
+        },
+        {
+          "id": "区间修改",
+          "text": "区间修改",
+          "depth": 2
+        },
+        {
+          "id": "查询",
+          "text": "查询",
+          "depth": 2
+        },
+        {
+          "id": "总结",
+          "text": "总结",
+          "depth": 2
+        }
+      ]
+    }
+  ]
+}

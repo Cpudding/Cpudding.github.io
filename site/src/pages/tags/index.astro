@@ -1,0 +1,31 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getPosts, getTagEntries } from '../../lib/posts';
+
+const posts = await getPosts();
+const tags = getTagEntries(posts);
+const taggedCount = posts.filter((post) => post.data.tags.length > 0).length;
+---
+
+<PageLayout title="文章标签" description="从数学和数据结构等主题查找布丁小窝的文章。">
+	<header class="page-header">
+		<p class="eyebrow">TOPICS</p>
+		<h1>文章标签</h1>
+		<p>共 {tags.length} 个标签，整理了 {taggedCount} 篇文章。</p>
+	</header>
+	<ul class="topic-list">
+		{tags.map((tag) => (
+			<li><a href={tag.href}><span>{tag.name}</span><span class="muted">{tag.posts.length} 篇文章 →</span></a></li>
+		))}
+	</ul>
+	{tags.length === 0 && <p class="empty-state">文章还没有添加标签。</p>}
+	<p class="muted">也可以查看<a href="/archives/">全部 {posts.length} 篇文章</a>，包括没有标签的随笔。</p>
+</PageLayout>
+
+<style>
+	.topic-list { max-width: 760px; list-style: none; padding: 0; margin: 0 0 2rem; }
+	.topic-list li { border-bottom: 1px solid var(--line); }
+	.topic-list a { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1.3rem 0; text-decoration: none; }
+	.topic-list a > span:first-child { font-size: 1.3rem; font-weight: 600; }
+	.topic-list a:hover > span:first-child { text-decoration: underline; text-underline-offset: 0.2em; }
+</style>

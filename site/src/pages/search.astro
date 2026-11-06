@@ -1,0 +1,200 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="搜索文章" description="搜索布丁小窝的文章标题、标签、正文和代码。">
+	<header class="page-header">
+		<p class="eyebrow">SEARCH</p>
+		<h1>搜索文章</h1>
+		<p>从标题、标签、正文和代码中查找内容。</p>
+	</header>
+	<section class="search-area" aria-label="全文搜索">
+		<form id="search-form" action="/search/" method="get" role="search">
+			<label for="search-query">关键词</label>
+			<div class="search-controls">
+				<input id="search-query" name="q" type="search" maxlength="200" placeholder="例如：线段树、平衡树 删除、qpow" autocomplete="off" spellcheck="false" aria-describedby="search-help" />
+				<button type="submit">搜索</button>
+			</div>
+			<p id="search-help" class="muted">支持中文。多个关键词用空格分隔，结果会同时包含这些关键词。</p>
+		</form>
+		<p id="search-status" role="status" aria-live="polite" aria-atomic="true">输入关键词开始搜索。</p>
+		<div id="search-error" class="empty-state" role="alert" hidden>
+			<p>暂时无法加载搜索数据，请检查网络后重试。</p>
+			<button id="search-retry" type="button">重新加载</button>
+		</div>
+		<ul id="search-results" class="post-list" aria-label="搜索结果" aria-busy="false"></ul>
+		<noscript><p class="empty-state">全文搜索需要启用 JavaScript。你也可以通过<a href="/archives/">文章归档</a>或<a href="/tags/">标签</a>继续浏览。</p></noscript>
+	</section>
+</PageLayout>
+
+<script>
+	interface SearchPost {
+		title: string;
+		description: string;
+		url: string;
+		pubDate: string;
+		tags: string[];
+		content: string;
+	}
+
+	const normalize = (text: string) => text.normalize('NFKC').toLocaleLowerCase();
+	const dateFormat = new Intl.DateTimeFormat('zh-CN', {
+		timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+	});
+
+	function initializeSearch() {
+		const form = document.querySelector<HTMLFormElement>('#search-form');
+		const input = document.querySelector<HTMLInputElement>('#search-query');
+		const status = document.querySelector<HTMLElement>('#search-status');
+		const results = document.querySelector<HTMLUListElement>('#search-results');
+		const error = document.querySelector<HTMLElement>('#search-error');
+		const retry = document.querySelector<HTMLButtonElement>('#search-retry');
+		if (!form || !input || !status || !results || !error || !retry || form.dataset.ready) return;
+		form.dataset.ready = 'true';
+		const events = new AbortController();
+		let indexPromise: Promise<SearchPost[]> | undefined;
+		let requestId = 0;
+
+		function loadIndex(): Promise<SearchPost[]> {
+			if (!indexPromise) {
+				indexPromise = fetch('/search-index.json', { signal: events.signal })
+					.then(async (response) => {
+						if (!response.ok) throw new Error('Search index request failed');
+						const data: unknown = await response.json();
+						if (!Array.isArray(data) || !data.every((entry) =>
+							entry && typeof entry.title === 'string' && typeof entry.description === 'string'
+							&& typeof entry.url === 'string' && entry.url.startsWith('/') && !entry.url.startsWith('//')
+							&& typeof entry.pubDate === 'string' && Number.isFinite(Date.parse(entry.pubDate))
+							&& typeof entry.content === 'string' && Array.isArray(entry.tags)
+							&& entry.tags.every((tag: unknown) => typeof tag === 'string'),
+						)) throw new Error('Invalid search index');
+						return data as SearchPost[];
+					})
+					.catch((reason) => { indexPromise = undefined; throw reason; });
+			}
+			return indexPromise;
+		}
+
+		function relevance(post: SearchPost, terms: string[]): number {
+			const title = normalize(post.title);
+			const tags = post.tags.map(normalize);
+			const description = normalize(post.description);
+			const content = normalize(post.content);
+			const all = [title, ...tags, description, content].join(' ');
+			if (!terms.every((term) => all.includes(term))) return 0;
+			return terms.reduce((score, term) => score
+				+ (title === term ? 40 : title.includes(term) ? 20 : 0)
+				+ (tags.includes(term) ? 15 : tags.some((tag) => tag.includes(term)) ? 10 : 0)
+				+ (description.includes(term) ? 6 : 0)
+				+ (content.includes(term) ? 2 : 0), 1);
+		}
+
+		function snippet(post: SearchPost, terms: string[]): string {
+			const text = post.content.normalize('NFKC');
+			const lower = text.toLocaleLowerCase();
+			const matches = terms.map((term) => lower.indexOf(term)).filter((index) => index >= 0);
+			const start = matches.length ? Math.max(0, Math.min(...matches) - 35) : 0;
+			const end = Math.min(text.length, start + 160);
+			return `${start > 0 ? '…' : ''}${text.slice(start, end)}${end < text.length ? '…' : ''}`;
+		}
+
+		function renderResult(post: SearchPost, terms: string[]) {
+			const item = document.createElement('li');
+			const meta = document.createElement('div');
+			meta.className = 'post-meta';
+			const time = document.createElement('time');
+			time.dateTime = post.pubDate;
+			time.textContent = dateFormat.format(new Date(post.pubDate));
+			meta.append(time);
+			const title = document.createElement('h2');
+			const link = document.createElement('a');
+			link.href = post.url;
+			link.textContent = post.title;
+			title.append(link);
+			const description = document.createElement('p');
+			description.textContent = post.description;
+			const excerpt = document.createElement('p');
+			excerpt.className = 'search-excerpt';
+			excerpt.textContent = snippet(post, terms);
+			item.append(meta, title, description, excerpt);
+			return item;
+		}
+
+		const search = async (value: string, updateUrl = true) => {
+			const current = ++requestId;
+			const query = value.trim().replace(/\s+/g, ' ').slice(0, 200);
+			input.value = query;
+			if (updateUrl) {
+				const url = new URL(window.location.href);
+				if (query) url.searchParams.set('q', query);
+				else url.searchParams.delete('q');
+				history.replaceState(null, '', url);
+			}
+			error.hidden = true;
+			results.replaceChildren();
+			if (!query) {
+				status.textContent = '输入关键词开始搜索。';
+				results.setAttribute('aria-busy', 'false');
+				return;
+			}
+			const terms = [...new Set(normalize(query).split(/\s+/).filter(Boolean))];
+			status.textContent = '正在搜索…';
+			results.setAttribute('aria-busy', 'true');
+			try {
+				const posts = await loadIndex();
+				if (current !== requestId || !form.isConnected) return;
+				const matches = posts.map((post) => ({ post, score: relevance(post, terms) }))
+					.filter((match) => match.score > 0)
+					.sort((a, b) => b.score - a.score || Date.parse(b.post.pubDate) - Date.parse(a.post.pubDate));
+				status.textContent = matches.length
+					? `找到 ${matches.length} 篇与“${query}”相关的文章。`
+					: `没有找到包含“${query}”的文章。试试减少关键词，或换一个说法。`;
+				results.replaceChildren(...matches.map(({ post }) => renderResult(post, terms)));
+			} catch {
+				if (current !== requestId || !form.isConnected) return;
+				status.textContent = '搜索暂时不可用。';
+				error.hidden = false;
+			} finally {
+				if (current === requestId) results.setAttribute('aria-busy', 'false');
+			}
+		};
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			void search(input.value);
+		}, { signal: events.signal });
+		retry.addEventListener('click', () => { void search(input.value); }, { signal: events.signal });
+		input.addEventListener('input', () => {
+			if (!input.value) void search('');
+		}, { signal: events.signal });
+		window.addEventListener('popstate', () => {
+			void search(new URL(window.location.href).searchParams.get('q') ?? '', false);
+		}, { signal: events.signal });
+		document.addEventListener('astro:before-swap', () => {
+			requestId++;
+			events.abort();
+		}, { once: true });
+		const query = new URL(window.location.href).searchParams.get('q') ?? '';
+		if (query) void search(query, false);
+	}
+
+	initializeSearch();
+	document.addEventListener('astro:page-load', initializeSearch);
+</script>
+
+<style>
+	.search-area { max-width: 760px; }
+	label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+	.search-controls { display: flex; gap: 0.75rem; }
+	input { flex: 1; min-width: 0; padding: 0.75rem 0.9rem; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+	button { padding: 0.75rem 1.2rem; font: inherit; font-weight: 600; cursor: pointer; color: var(--surface); background: var(--accent); border: 1px solid var(--accent); border-radius: 6px; }
+	input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+	#search-help { font-size: 0.9rem; margin-top: 0.65rem; }
+	#search-status { margin: 2rem 0 1.5rem; }
+	#search-error[hidden] { display: none; }
+	#search-results :global(.search-excerpt) { margin-top: 0.7rem; color: var(--ink); overflow-wrap: anywhere; font-size: 0.9rem; }
+	@media (max-width: 420px) {
+		.search-controls { gap: 0.5rem; }
+		button { padding-inline: 0.8rem; }
+	}
+</style>

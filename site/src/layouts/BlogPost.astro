@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { AUTHOR_NAME } from '../consts';
+
+type PostLink = { title: string; permalink: string };
+type Props = Pick<
+	CollectionEntry<'blog'>['data'],
+	'title' | 'description' | 'pubDate' | 'updatedDate' | 'heroImage'
+> & {
+	tags?: string[];
+	headings?: MarkdownHeading[];
+	previousPost?: PostLink;
+	nextPost?: PostLink;
+};
+
+const {
+	title, description, pubDate, updatedDate, heroImage,
+	tags = [], headings = [], previousPost, nextPost,
+} = Astro.props;
+const toc = headings.filter(({ depth }) => depth <= 3);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} pubDate={pubDate} updatedDate={updatedDate} />
+	</head>
+	<body>
+		<Header />
+		<main id="main-content" class="page-main" tabindex="-1">
+			<article>
+				<header class="post-header">
+					<a class="back-link" href="/archives/">← 全部文章</a>
+					<h1>{title}</h1>
+					<div class="post-meta">
+						<span>{AUTHOR_NAME}</span>
+						<span>发布于 <FormattedDate date={pubDate} /></span>
+						{updatedDate && <span>更新于 <FormattedDate date={updatedDate} /></span>}
+					</div>
+					{tags.length > 0 && <ul class="tags">{tags.map((tag) => <li><a class="tag-link" href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a></li>)}</ul>}
+				</header>
+				{heroImage && <div class="hero-image"><Image src={heroImage} width={760} alt="" /></div>}
+				<div class:list={['reading-layout', { 'has-toc': toc.length > 0 }]}>
+					<div class="prose" data-pagefind-body>
+						<slot />
+					</div>
+					{toc.length > 0 && (
+						<aside class="toc-column">
+							<details class="toc" open>
+								<summary>本文目录</summary>
+								<nav aria-label="文章目录">
+									<ol>{toc.map((heading) => (
+										<li class:list={{ nested: heading.depth > 2 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>
+									))}</ol>
+								</nav>
+							</details>
+						</aside>
+					)}
+				</div>
+				<footer class="article-footer">
+					<p>感谢阅读。<a href="/about/">关于作者</a> · <a href="/rss.xml">订阅更新</a></p>
+					{(previousPost || nextPost) && (
+						<nav class="adjacent-posts" aria-label="相邻文章">
+							{previousPost && <a href={previousPost.permalink}><span>上一篇</span>{previousPost.title}</a>}
+							{nextPost && <a href={nextPost.permalink}><span>下一篇</span>{nextPost.title}</a>}
+						</nav>
+					)}
+				</footer>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.post-header { max-width: 760px; margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+	.back-link { display: inline-block; margin-bottom: 24px; color: var(--muted); font-size: 13px; text-decoration: none; }
+	.back-link:hover { color: var(--accent); }
+	h1 { margin-bottom: 18px; font-size: clamp(25px, 3vw, 32px); line-height: 1.55; }
+	.tags { margin-top: 12px; }
+	.hero-image { max-width: 760px; margin-bottom: 32px; }
+	.hero-image img { display: block; border-radius: 4px; }
+	.reading-layout { min-width: 0; }
+	.reading-layout.has-toc { display: grid; grid-template-columns: minmax(0, 760px) 200px; gap: 40px; align-items: start; }
+	.toc-column { position: sticky; top: 28px; min-width: 0; }
+	.toc { max-height: calc(100vh - 56px); overflow-y: auto; border-left: 1px solid var(--line); padding-left: 18px; font-size: 12px; line-height: 1.65; }
+	.toc summary { padding-bottom: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+	.toc ol { margin: 0; padding: 0; list-style: none; }
+	.toc li { margin-bottom: 10px; }
+	.toc li.nested { padding-left: 12px; }
+	.toc a { color: var(--muted); text-decoration: none; }
+	.toc a:hover { color: var(--accent); }
+	.article-footer { max-width: 760px; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line); }
+	.article-footer p { margin: 0; color: var(--muted); font-size: 13px; }
+	.adjacent-posts { display: flex; justify-content: space-between; gap: 32px; margin-top: 24px; }
+	.adjacent-posts a { max-width: 48%; font-size: 14px; text-decoration: none; }
+	.adjacent-posts span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+	@media (max-width: 960px) {
+		.reading-layout.has-toc { display: flex; flex-direction: column; gap: 28px; }
+		.reading-layout > .prose { width: 100%; }
+		.toc-column { position: static; order: -1; width: 100%; max-width: 760px; }
+		.toc { max-height: 240px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 4px; }
+		.toc summary { padding-bottom: 0; }
+		.toc[open] summary { padding-bottom: 12px; }
+	}
+	@media (max-width: 620px) {
+		.post-header { margin-bottom: 28px; padding-bottom: 22px; }
+		.back-link { margin-bottom: 20px; }
+		.post-meta { gap: 5px 12px; font-size: 12px; }
+		.adjacent-posts { flex-direction: column; gap: 18px; }
+		.adjacent-posts a { max-width: 100%; }
+	}
+</style>

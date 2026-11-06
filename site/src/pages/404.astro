@@ -1,0 +1,21 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="页面未找到" description="这个地址没有找到页面，可以从首页、归档或全文搜索继续阅读。" noindex>
+	<header class="page-header">
+		<p class="eyebrow">404</p>
+		<h1>这里还没有页面。</h1>
+		<p>地址可能有误，或页面已经移动。可以从下面的入口继续寻找。</p>
+	</header>
+	<nav class="recovery-links" aria-label="继续浏览">
+		<a href="/">回到首页 →</a>
+		<a href="/archives/">查看文章归档 →</a>
+		<a href="/search/">搜索文章 →</a>
+	</nav>
+</PageLayout>
+
+<style>
+	.recovery-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+	.recovery-links a { padding-block: 0.65rem; }
+</style>

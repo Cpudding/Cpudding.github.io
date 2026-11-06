@@ -1,0 +1,33 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { getArchiveGroups, getPosts, postHref, type ArchiveMonth } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+	const years = getArchiveGroups(await getPosts());
+	return years.flatMap((year) => year.months.map((month) => ({
+		params: { year: year.year, month: month.month }, props: { archive: month },
+	})));
+}
+
+interface Props { archive: ArchiveMonth }
+const { archive } = Astro.props;
+const title = `${archive.year} 年 ${Number(archive.month)} 月归档`;
+---
+
+<PageLayout title={title} description={`${title}，共 ${archive.posts.length} 篇文章。`}>
+	<header class="page-header">
+		<p class="eyebrow"><a href="/archives/">全部归档</a> / <a href={`/archives/${archive.year}/`}>{archive.year} 年</a></p>
+		<h1>{title}</h1>
+		<p>这个月共发布 {archive.posts.length} 篇文章。</p>
+	</header>
+	<ul class="post-list">
+		{archive.posts.map((post) => (
+			<li>
+				<div class="post-meta"><FormattedDate date={post.data.pubDate} /></div>
+				<h2><a href={postHref(post)}>{post.data.title}</a></h2>
+				<p>{post.data.description}</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

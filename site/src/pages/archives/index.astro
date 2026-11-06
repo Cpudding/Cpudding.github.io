@@ -1,0 +1,45 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getArchiveGroups, getPosts, postHref } from '../../lib/posts';
+
+const posts = await getPosts();
+const years = getArchiveGroups(posts);
+---
+
+<PageLayout title="文章归档" description="按发布时间浏览布丁小窝的全部文章。">
+	<header class="page-header">
+		<p class="eyebrow">ARCHIVE</p>
+		<h1>文章归档</h1>
+		<p>共 {posts.length} 篇文章，按发布时间排列。</p>
+	</header>
+	{years.map((year) => (
+		<section class="archive-year" aria-labelledby={`year-${year.year}`}>
+			<div class="archive-heading">
+				<h2 id={`year-${year.year}`}><a href={year.href}>{year.year} 年</a></h2>
+				<span class="muted">{year.posts.length} 篇文章</span>
+			</div>
+			<nav class="tags" aria-label={`${year.year} 年月份归档`}>
+				{year.months.map((month) => (
+					<a class="tag-link" href={month.href}>{Number(month.month)} 月 · {month.posts.length} 篇</a>
+				))}
+			</nav>
+			<ul class="post-list">
+				{year.posts.map((post) => (
+					<li>
+						<div class="post-meta"><FormattedDate date={post.data.pubDate} /></div>
+						<h3><a href={postHref(post)}>{post.data.title}</a></h3>
+						<p>{post.data.description}</p>
+					</li>
+				))}
+			</ul>
+		</section>
+	))}
+	{posts.length === 0 && <p class="empty-state">还没有文章，欢迎以后再来看看。</p>}
+</PageLayout>
+
+<style>
+	.archive-year + .archive-year { margin-top: 3rem; }
+	.archive-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem; }
+	.archive-year .post-list { margin-top: 1.5rem; }
+</style>
